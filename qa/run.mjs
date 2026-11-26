@@ -73,6 +73,7 @@ const FACT = { heikin: "10分間", seion: "静穏", max12: "風力12", shunkan: 
   const okSrc = Object.values(G.SRC).every(([n, u]) => /^気象庁「/.test(n) && /^https:\/\/www\.jma\.go\.jp\/jma\/kishou\/know\/yougo_hp\//.test(u));
   check("出典は気象庁の予報用語のページだけ", okSrc);
   check("風の強さの予報用語（予報ことばよみ）・台風（台風よみ）・竜巻（突風よみ）を問わない", !G.KINDS.some((k) => { const all = [k.why, k.look, k.key, k.ans]; for (let i = 0; i < 100; i++) { const P = G.make(`${k.id}|nz${i}`); all.push(P.q, ...P.opts); } return /やや強い風|非常に強い風|猛烈な風|台風の|竜巻|突風/.test(all.join()); }));
+  check("2段目の選び肢に風力を書かない（1段目の答えから2段目が分かってしまう。fuuryoku-yomi #1 の CodeRabbit）", Object.values(G.GROUPS).every((g) => !/風力|\d/.test(g.name + g.sub)));
   check("2段目は5つ（備考なし・海上風警報・海上強風警報・海上暴風警報・海上暴風警報または海上台風警報）", Object.keys(G.GROUPS).join() === "nashi,kaze,kyofu,bofu,taifu");
 }
 {
